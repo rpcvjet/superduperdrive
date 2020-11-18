@@ -2,15 +2,11 @@ package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.NoteForm;
 import com.udacity.jwdnd.course1.cloudstorage.model.Notes;
-import com.udacity.jwdnd.course1.cloudstorage.services.NotesService;
-import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
+import com.udacity.jwdnd.course1.cloudstorage.services.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/note")
@@ -18,45 +14,38 @@ public class NotesController {
 
     private NotesService notesService;
     private UserService userService;
+    private AuthenticationService authenticationService;
+    private CredentialsService credentialService;
+    private EncryptionService encryptionService;
 
-    public NotesController(NotesService notesService, UserService userService) {
+    public NotesController(NotesService notesService, UserService userService, AuthenticationService authenticationService, CredentialsService credentialService, EncryptionService encryptionService) {
         this.notesService = notesService;
         this.userService = userService;
+        this.authenticationService = authenticationService;
+        this.credentialService = credentialService;
+        this.encryptionService = encryptionService;
+    }
+
+    @ModelAttribute("noteForm")
+    public NoteForm getNotesDto() {
+        return new NoteForm();
     }
 
     @PostMapping("/insert")
-    public String postMessage(Authentication authentication, NoteForm noteForm, Model model) {
-        Notes note = new Notes();
-        model.addAttribute("noteForm", new NoteForm());
-
-        if (noteForm.getNoteid() == null) {
-            System.out.println("POSTINGGGGGGGGGG");
-            System.out.println(note.toString());
-            note.setNotetitle(noteForm.getNotetitle());
-            note.setNotedescription(noteForm.getNotedescription());
-            notesService.addNote(note);
-            noteForm.setNotetitle("");
-            noteForm.setNotedescription("");
-            model.addAttribute("Notes", this.notesService.getAllNotes());
-            return "home";
-        }
-        else {
-            System.out.println("UPDATING NOTE");
-            note.setNoteid(noteForm.getNoteid());
-            note.setNotetitle(noteForm.getNotetitle());
-            note.setNotedescription(noteForm.getNotedescription());
-            notesService.updateNoteById(note);
-            model.addAttribute("Notes", this.notesService.getAllNotes());
-            return "home";
-        }
-
+    public String postMessage(Authentication authentication, @ModelAttribute("Notes") Notes notes, Model model) {
+        System.out.println("POSTING A NOTE");
+        notesService.addNote(notes, authentication);
+        model.addAttribute("encryptionService", encryptionService);
+        model.addAttribute("Notes", this.notesService.getAllNotes(userService.getUser(authentication.getName()).getUserid()));
+        model.addAttribute("credentialsForm", this.credentialService.getUserCredentials(userService.getUser(authentication.getName())));
+        return "home";
     }
 
     @GetMapping("/delete/{noteId}")
     public String deleteNote(@PathVariable Integer noteId, Model model, Authentication authentication) {
         notesService.deleteNote(noteId);
-        model.addAttribute("Notes", this.notesService.getAllNotes());
-        model.addAttribute("noteForm", new NoteForm());
+        model.addAttribute("encryptionService", encryptionService);
+        model.addAttribute("Notes", this.notesService.getAllNotes(userService.getUser(authentication.getName()).getUserid()));
         return "home";
     }
 }
