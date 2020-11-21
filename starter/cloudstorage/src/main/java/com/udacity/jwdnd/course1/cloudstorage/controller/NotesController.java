@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
+import com.udacity.jwdnd.course1.cloudstorage.model.CredentialsForm;
 import com.udacity.jwdnd.course1.cloudstorage.model.NoteForm;
 import com.udacity.jwdnd.course1.cloudstorage.model.Notes;
 import com.udacity.jwdnd.course1.cloudstorage.services.*;
@@ -27,8 +28,13 @@ public class NotesController {
     }
 
     @ModelAttribute("noteForm")
-    public NoteForm getNotesDto() {
+    public NoteForm getNotes() {
         return new NoteForm();
+    }
+
+    @ModelAttribute("credentialsForm")
+    public CredentialsForm getCredentials(){
+        return new CredentialsForm();
     }
 
     @PostMapping("/insert")
@@ -37,7 +43,7 @@ public class NotesController {
         notesService.addNote(notes, authentication);
         model.addAttribute("encryptionService", encryptionService);
         model.addAttribute("Notes", this.notesService.getAllNotes(userService.getUser(authentication.getName()).getUserid()));
-        model.addAttribute("credentialsForm", this.credentialService.getUserCredentials(userService.getUser(authentication.getName())));
+        model.addAttribute("Credentials", this.credentialService.getUserCredentials(userService.getUser(authentication.getName()).getUserid()));
         return "home";
     }
 
@@ -46,6 +52,8 @@ public class NotesController {
         notesService.deleteNote(noteId);
         model.addAttribute("encryptionService", encryptionService);
         model.addAttribute("Notes", this.notesService.getAllNotes(userService.getUser(authentication.getName()).getUserid()));
+//        model.addAttribute("Credentials", this.credentialService.getUserCredentials(userService.getUser(authentication.getName())));
+
         return "home";
     }
 }

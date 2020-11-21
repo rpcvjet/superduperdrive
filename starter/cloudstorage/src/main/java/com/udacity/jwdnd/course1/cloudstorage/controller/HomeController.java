@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
+import com.udacity.jwdnd.course1.cloudstorage.model.CredentialsForm;
 import com.udacity.jwdnd.course1.cloudstorage.model.NoteForm;
 import com.udacity.jwdnd.course1.cloudstorage.services.CredentialsService;
 import com.udacity.jwdnd.course1.cloudstorage.services.EncryptionService;
@@ -27,12 +28,11 @@ public class HomeController {
 
     @GetMapping
     public String getHomePage( Model model){
-        System.out.println("HOMECONTROLLERRRRRRRR");
         model.addAttribute("noteForm", new NoteForm());
+        model.addAttribute("credentialsForm", new CredentialsForm());
         model.addAttribute("encryptionService", encryptionService);
         model.addAttribute("Notes", notesService.getAllNotes(userService.getCurrentUser().getUserid()));
-        System.out.println("current User " + notesService.getAllNotes(userService.getCurrentUser().getUserid()) );
-        model.addAttribute("credentialsForm", credentialsService.getAllCredentials());
+        model.addAttribute("Credentials", credentialsService.getUserCredentials(userService.getCurrentUser().getUserid()));
         return "home";
     }
 
