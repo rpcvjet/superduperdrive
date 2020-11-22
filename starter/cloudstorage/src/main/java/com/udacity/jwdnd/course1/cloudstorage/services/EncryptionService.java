@@ -10,6 +10,7 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Base64;
 
 @Service
@@ -33,10 +34,12 @@ public class EncryptionService {
     }
 
     public String decryptValue(String data, String key) {
+        System.out.println("key in decrpyt "+ key);
+        System.out.println("data in decrpyt "+ data);
         byte[] decryptedValue = null;
         try {
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-            SecretKey secretKey = new SecretKeySpec(key.getBytes(), "AES");
+            SecretKey secretKey = new SecretKeySpec(key.getBytes() , "AES");
             cipher.init(Cipher.DECRYPT_MODE, secretKey);
             decryptedValue = cipher.doFinal(Base64.getDecoder().decode(data));
         } catch (NoSuchAlgorithmException | NoSuchPaddingException
@@ -50,11 +53,12 @@ public class EncryptionService {
     public String getSecureKey() {
         try {
             KeyGenerator gen = KeyGenerator.getInstance("AES");
-            gen.init(128); /* 128-bit AES */
+            SecureRandom random = new SecureRandom();
+            gen.init(128, random); /* 128-bit AES */
             SecretKey secret = gen.generateKey();
             byte[] binary = secret.getEncoded();
             String key = String.format("%032X", new BigInteger(+1, binary));
-            return key;
+            return key.toString();
         } catch (Exception e) {
             e.printStackTrace();
         }

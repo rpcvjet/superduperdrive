@@ -31,28 +31,29 @@ public class CredentialsService {
         System.out.println("CREATING CREDENTIALS SERVICE");
     }
 
-//    public String getPlainTextPassword(Integer credentialid) {
-//        return encryptionService.decryptValue();
-//    }
-
     public List<Credentials> getUserCredentials(Integer userid){
         System.out.println("GETTING CREDENTIALS");
         return credentialsMapper.getUserCredentials(userService.getCurrentUser().getUserid());
     }
 
     public Integer addCredential(Credentials credentials, Authentication authentication) {
+        //INSERT HERE
         if(credentials.getCredentialid() == null){
             System.out.println("POSTING CREDENTIALS!!");
             String key = encryptionService.getSecureKey().toString();
-
+            System.out.println("KEY CREATE " +  key);
             credentialsMapper.addCredential(new Credentials(null, credentials.getUrl(), credentials.getUsername(), key, encryptionService.encryptValue(credentials.getPassword(), key), userMapper.getUser(authentication.getName()).getUserid()));
         }
+        //UPDATE HERE
         else {
             System.out.println("UPDATING CREDENTIALS");
-            String newPassword =credentials.getPassword();
+            String key = encryptionService.getSecureKey().toString();
+            credentials.setKey(encryptionService.encryptValue(credentials.getPassword(),key));
+            credentials.setCredentialid(credentials.getCredentialid());
             credentials.setUrl(credentials.getUrl());
             credentials.setUsername(credentials.getUsername());
-            //update note here
+            credentials.setPassword(credentials.getPassword());
+            credentialsMapper.updateCredential(credentials);
         }
         return credentialsMapper.addCredential(credentials);
     }
