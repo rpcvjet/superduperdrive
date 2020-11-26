@@ -52,7 +52,7 @@ public class NotesController {
         notesService.deleteNote(noteId);
         model.addAttribute("encryptionService", encryptionService);
         model.addAttribute("Notes", this.notesService.getAllNotes(userService.getUser(authentication.getName()).getUserid()));
-//        model.addAttribute("Credentials", this.credentialService.getUserCredentials(userService.getUser(authentication.getName())));
+        model.addAttribute("Credentials", this.credentialService.getUserCredentials(userService.getUser(authentication.getName()).getUserid()));
 
         return "home";
     }

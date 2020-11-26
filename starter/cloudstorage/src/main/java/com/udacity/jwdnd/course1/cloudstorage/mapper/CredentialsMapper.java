@@ -11,7 +11,6 @@ public interface CredentialsMapper {
     @Select("SELECT * FROM CREDENTIALS WHERE userid = #{userid}")
     List<Credentials> getUserCredentials(Integer userid);
 
-    //get credentialbyid
     @Select("SELECT * FROM CREDENTIALS where credentialid = #{credentialid}")
     Integer findCredentialById(Integer credentials);
 
@@ -19,7 +18,11 @@ public interface CredentialsMapper {
     @Options(useGeneratedKeys = true, keyProperty = "credentialid")
     Integer addCredential(Credentials credentials);
 
-    @Update("UPDATE CREDENTIALS SET url = #{url}, password = #{password}, username = #{password}, key={key} WHERE credentialid = #{credentialid} ")
+    @Update("UPDATE CREDENTIALS SET url = #{url}, password = #{password}, username = #{username}, key={key} WHERE credentialid = #{credentialid} ")
     void updateCredential(Credentials credentials);
+
+    @Delete("DELETE FROM CREDENTIALS WHERE credentialid = #{credentialid}")
+    void deleteCredential(Integer credentialid);
 }
+
 

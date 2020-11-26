@@ -138,7 +138,7 @@
                                 <tbody>
                                 <tr th:each="creds : ${Credentials}">
                                     <td>
-                                        <a id="edit-credential-button" th:onclick="javascript:showCredentialModal([[${creds.credentialid}]],[[${creds.url}]], [[${creds.username}]],[[${encryptionService.decryptValue(creds.password,creds.key)}]])"
+                                        <a id="edit-credential-button" th:onclick="javascript:showCredentialModal([[${creds.credentialid}]],[[${creds.url}]], [[${creds.username}]],[[${encryptionService.decryptValue(creds.password,creds.key)}]], [[${creds.key}]])"
 
                                                 th:credentialid="${creds.getCredentialid()}"
                                                 th:url="${creds.getUrl()}"
@@ -146,7 +146,7 @@
                                                 th:password="${creds.getPassword()}"
                                                 type="button"
                                                 class="btn btn-success">Edit</a>
-                                        <a class="btn btn-danger">Delete</a>
+                                        <a class="btn btn-danger" th:href="@{/credentials/delete/{credentialid} (credentialid=${creds.credentialid})}">Delete</a>
                                     </td>
                                     <th scope="row" th:text="${creds.getUrl()}"></th>
                                     <td th:text="${creds.getUsername()}"></td>
@@ -168,6 +168,7 @@
                                     <div class="modal-body">
                                         <form th:object="${credentialsForm}" action="#" method="POST" th:action="@{/credentials/insert}">
                                             <input th:field="*{credentialid}" type="hidden" name="credentialId" id="credential-id">
+                                            <input th:field="*{key}" type="hidden" name="credentialId" id="credential-key">
                                             <div class="form-group">
                                                 <label for="note-title" class="col-form-label">URL</label>
                                                 <input th:field="*{url}" type="text" name= "url" class="form-control" id="credential-url" maxlength="100" required>
@@ -212,11 +213,12 @@
             }
 
             // For opening the credentials modal
-            function showCredentialModal(credentialId, url, username, password) {
+            function showCredentialModal(credentialId, url, username, password, key) {
                 $('#credential-id').val(credentialId ? credentialId : '');
                 $('#credential-url').val(url ? url : '');
                 $('#credential-username').val(username ? username : '');
                 $('#credential-password').val(password ? password : '');
+                $('#credential-key').val(key ? key : '');
                 $('#credentialModal').modal('show');
             }
         </script>

@@ -47,14 +47,12 @@ public class CredentialsService {
         //UPDATE HERE
         else {
             System.out.println("UPDATING CREDENTIALS");
-            String key = encryptionService.getSecureKey().toString();
-            credentials.setKey(encryptionService.encryptValue(credentials.getPassword(),key));
-            credentials.setCredentialid(credentials.getCredentialid());
-            credentials.setUrl(credentials.getUrl());
-            credentials.setUsername(credentials.getUsername());
-            credentials.setPassword(credentials.getPassword());
+            credentials.setPassword(encryptionService.encryptValue(credentials.getPassword(),credentials.getKey()));
             credentialsMapper.updateCredential(credentials);
         }
         return credentialsMapper.addCredential(credentials);
+    }
+    public void deleteCredential(Integer credentialid) {
+        credentialsMapper.deleteCredential(credentialid);
     }
 }
