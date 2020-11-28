@@ -18,13 +18,15 @@ public class NotesController {
     private AuthenticationService authenticationService;
     private CredentialsService credentialService;
     private EncryptionService encryptionService;
+    private FilesService filesService;
 
-    public NotesController(NotesService notesService, UserService userService, AuthenticationService authenticationService, CredentialsService credentialService, EncryptionService encryptionService) {
+    public NotesController(NotesService notesService, UserService userService, AuthenticationService authenticationService, CredentialsService credentialService, EncryptionService encryptionService, FilesService filesService) {
         this.notesService = notesService;
         this.userService = userService;
         this.authenticationService = authenticationService;
         this.credentialService = credentialService;
         this.encryptionService = encryptionService;
+        this.filesService = filesService;
     }
 
     @ModelAttribute("noteForm")
@@ -44,6 +46,7 @@ public class NotesController {
         model.addAttribute("encryptionService", encryptionService);
         model.addAttribute("Notes", this.notesService.getAllNotes(userService.getUser(authentication.getName()).getUserid()));
         model.addAttribute("Credentials", this.credentialService.getUserCredentials(userService.getUser(authentication.getName()).getUserid()));
+        model.addAttribute("files", filesService.getAllUserFiles(userService.getCurrentUser().getUserid()));
         return "home";
     }
 
@@ -53,7 +56,7 @@ public class NotesController {
         model.addAttribute("encryptionService", encryptionService);
         model.addAttribute("Notes", this.notesService.getAllNotes(userService.getUser(authentication.getName()).getUserid()));
         model.addAttribute("Credentials", this.credentialService.getUserCredentials(userService.getUser(authentication.getName()).getUserid()));
-
+        model.addAttribute("files", filesService.getAllUserFiles(userService.getCurrentUser().getUserid()));
         return "home";
     }
 }
