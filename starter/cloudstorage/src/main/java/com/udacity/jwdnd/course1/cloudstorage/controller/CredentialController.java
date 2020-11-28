@@ -19,14 +19,16 @@ public class CredentialController {
     private CredentialsService credentialService;
     private NotesService notesService;
     private EncryptionService encryptionService;
+    private FilesService filesService;
 
-    public CredentialController(CredentialsService credentialsService, UserService userService, AuthenticationService authenticationService, CredentialsService credentialService, NotesService notesService,EncryptionService encryptionService) {
+    public CredentialController(CredentialsService credentialsService, UserService userService, AuthenticationService authenticationService, CredentialsService credentialService, NotesService notesService,EncryptionService encryptionService,FilesService filesService) {
         this.credentialsService = credentialsService;
         this.userService = userService;
         this.authenticationService = authenticationService;
         this.credentialService = credentialService;
         this.notesService = notesService;
         this.encryptionService = encryptionService;
+        this.filesService = filesService;
     }
 
     @ModelAttribute("credentialsForm")
@@ -49,7 +51,7 @@ public class CredentialController {
         model.addAttribute("encryptionService", encryptionService);
         model.addAttribute("credentials", this.credentialService.getUserCredentials(userService.getUser(authentication.getName()).getUserid()));
         model.addAttribute("notes", this.notesService.getAllNotes(userService.getUser(authentication.getName()).getUserid()));
-
+        model.addAttribute("files", filesService.getAllUserFiles(userService.getCurrentUser().getUserid()));
         return "home";
     }
 
@@ -58,6 +60,7 @@ public class CredentialController {
         credentialsService.addCredential(credentials, authentication);
         model.addAttribute("Notes", this.notesService.getAllNotes(userService.getUser(authentication.getName()).getUserid()));
         model.addAttribute("Credentials", this.credentialService.getUserCredentials(userService.getUser(authentication.getName()).getUserid()));
+        model.addAttribute("files", filesService.getAllUserFiles(userService.getCurrentUser().getUserid()));
         return "home";
     }
 
@@ -67,6 +70,7 @@ public class CredentialController {
         model.addAttribute("encryptionService", encryptionService);
         model.addAttribute("Credentials", this.credentialService.getUserCredentials(userService.getUser(authentication.getName()).getUserid()));
         model.addAttribute("Notes", this.notesService.getAllNotes(userService.getUser(authentication.getName()).getUserid()));
+        model.addAttribute("files", filesService.getAllUserFiles(userService.getCurrentUser().getUserid()));
         return "home";
     }
 
