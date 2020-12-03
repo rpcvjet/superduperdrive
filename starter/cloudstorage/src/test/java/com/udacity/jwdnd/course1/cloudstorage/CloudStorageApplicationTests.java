@@ -39,7 +39,7 @@ class CloudStorageApplicationTests {
 	@BeforeEach
 	public void beforeEach() {
 		baseURL = baseURL = "http://localhost:" + port;
-		wait = new WebDriverWait(driver, 15);
+		wait = new WebDriverWait(driver, 30);
 	}
 
 	@AfterEach
@@ -175,18 +175,18 @@ class CloudStorageApplicationTests {
 
 		//wait for the submit button to render
 		wait.until(ExpectedConditions.elementToBeClickable(credentialsPage.getCredentialSubmitBtn()));
-		System.out.println("SHOULD BE TYPING NOW...");
 		credentialsPage.populateCredentials("someurl.com", "myusername", "mypassword");
 		((JavascriptExecutor) driver).executeScript(click, credentialsPage.getCredentialSubmitBtn());
+
 
 		wait.until(ExpectedConditions.elementToBeClickable(credentialsPage.getNavCredentialsTab()));
 		((JavascriptExecutor) driver).executeScript(click, credentialsPage.getNavCredentialsTab());
 		wait.until(ExpectedConditions.elementToBeClickable(credentialsPage.getAddCredentialsBtn()));
+		System.out.println("WE HERE!!");
 
 		Assertions.assertEquals("someurl.com", credentialsPage.getCredentialUrl().getText());
 		Assertions.assertEquals("myusername", credentialsPage.getCredentialUsername().getText());
 		Assertions.assertNotEquals("mypassword",credentialsPage.getCredentialPassword().getText());
-		System.out.println("WE HERE!!");
 
 		//edit
 		wait.until(ExpectedConditions.elementToBeClickable(credentialsPage.getEditCredentialBtn()));
