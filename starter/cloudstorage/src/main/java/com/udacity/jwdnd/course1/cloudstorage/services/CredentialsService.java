@@ -37,6 +37,7 @@ public class CredentialsService {
     }
 
     public Integer addCredential(Credentials credentials, Authentication authentication) {
+        System.out.println("ADDING A CREDENTIAL");
         //INSERT HERE
         if(credentials.getCredentialid() == null){
             System.out.println("POSTING CREDENTIALS!!");
