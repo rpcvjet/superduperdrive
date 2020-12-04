@@ -57,6 +57,7 @@ public class CredentialController {
 
     @PostMapping("/insert")
     public String postCredential(Authentication authentication, @ModelAttribute("Credentials") Credentials credentials, Model model) {
+        System.out.println("***** ADDING CREDENTIALS*****2");
         credentialsService.addCredential(credentials, authentication);
         model.addAttribute("Notes", this.notesService.getAllNotes(userService.getUser(authentication.getName()).getUserid()));
         model.addAttribute("Credentials", this.credentialService.getUserCredentials(userService.getUser(authentication.getName()).getUserid()));

@@ -42,11 +42,9 @@ class CloudStorageApplicationTests {
 		wait = new WebDriverWait(driver, 15);
 	}
 
-	@AfterEach
-	public void afterEach() {
-		if (this.driver != null) {
-			driver.quit();
-		}
+	@AfterAll
+	public static void afterAll() {
+		driver.close();
 	}
 
 	private void signupLib(String fn, String ln, String un, String pw){
@@ -156,7 +154,6 @@ class CloudStorageApplicationTests {
 	@Test
 	public void CredentialsPageTest(){
 		signupLib(firstName,lastName, username,password);
-		System.out.println(" SIGNED UP ");
 		loginLib(username, password);
 		System.out.println(" LOGGED IN ");
 
@@ -166,19 +163,17 @@ class CloudStorageApplicationTests {
 		System.out.println("ABOUT TO ADD A CRED...");
 
 		//Add a Credential
-		wait.until(ExpectedConditions.elementToBeClickable(By.id("addCredentialsBtn"))).click();
+		wait.until(ExpectedConditions.elementToBeClickable(credentialsPage.getAddCredentialsBtn()));
 		((JavascriptExecutor) driver).executeScript(click, credentialsPage.getAddCredentialsBtn());
-		System.out.println("CREDENTIALS TAB HAS BEEN CLICKED...");
-		//enter data
-		((JavascriptExecutor) driver).executeScript(click, credentialsPage.getAddCredentialsBtn());
-		System.out.println("ADD CREDENTIALS BUTTON HAS BEEN CLICKED...");
+		//System.out.println("CREDENTIALS TAB HAS BEEN CLICKED...");
 
-		//wait for the submit button to render
+		//enter data
 		wait.until(ExpectedConditions.elementToBeClickable(credentialsPage.getCredentialSubmitBtn()));
-		System.out.println("SHOULD BE TYPING NOW...");
 		credentialsPage.populateCredentials("someurl.com", "myusername", "mypassword");
+		System.out.println("WE HERE!!");
 		((JavascriptExecutor) driver).executeScript(click, credentialsPage.getCredentialSubmitBtn());
 
+		//wait for the submit button to render
 		wait.until(ExpectedConditions.elementToBeClickable(credentialsPage.getNavCredentialsTab()));
 		((JavascriptExecutor) driver).executeScript(click, credentialsPage.getNavCredentialsTab());
 		wait.until(ExpectedConditions.elementToBeClickable(credentialsPage.getAddCredentialsBtn()));
@@ -186,7 +181,6 @@ class CloudStorageApplicationTests {
 		Assertions.assertEquals("someurl.com", credentialsPage.getCredentialUrl().getText());
 		Assertions.assertEquals("myusername", credentialsPage.getCredentialUsername().getText());
 		Assertions.assertNotEquals("mypassword",credentialsPage.getCredentialPassword().getText());
-		System.out.println("WE HERE!!");
 
 		//edit
 		wait.until(ExpectedConditions.elementToBeClickable(credentialsPage.getEditCredentialBtn()));
