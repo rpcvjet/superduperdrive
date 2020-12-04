@@ -22,7 +22,7 @@ public class CredentialsPage {
     @FindBy(id="credential-password")
     private WebElement inputPassword;
 
-    @FindBy(id="credentialSubmit")
+    @FindBy(id="credentialSaveChangesButton")
     private WebElement credentialSubmitBtn;
 
     @FindBy(id="credentialUrl")
@@ -90,6 +90,7 @@ public class CredentialsPage {
     }
 
     public WebElement getCredentialUrl() {
+        System.out.println("HERE?");
         return credentialUrl;
     }
 
