@@ -1,6 +1,7 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.CredentialsForm;
+import com.udacity.jwdnd.course1.cloudstorage.model.FileForm;
 import com.udacity.jwdnd.course1.cloudstorage.model.NoteForm;
 import com.udacity.jwdnd.course1.cloudstorage.model.Notes;
 import com.udacity.jwdnd.course1.cloudstorage.services.*;
@@ -38,6 +39,12 @@ public class NotesController {
     public CredentialsForm getCredentials(){
         return new CredentialsForm();
     }
+
+    @ModelAttribute("fileForm")
+    public FileForm getFileForm(){
+        return new FileForm();
+    }
+
 
     @PostMapping("/insert")
     public String postMessage(Authentication authentication, @ModelAttribute("Notes") Notes notes, Model model) {

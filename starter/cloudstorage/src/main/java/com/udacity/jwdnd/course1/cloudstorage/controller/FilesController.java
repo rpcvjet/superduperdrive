@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
+import com.udacity.jwdnd.course1.cloudstorage.model.FileForm;
 import com.udacity.jwdnd.course1.cloudstorage.model.Files;
 import com.udacity.jwdnd.course1.cloudstorage.services.FilesService;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
@@ -9,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,14 +27,22 @@ public class FilesController {
         this.userService = userService;
     }
 
+    @ModelAttribute("fileForm")
+    public FileForm getFiles() {
+        return new FileForm();
+    }
+
     @PostMapping("/add")
-    public String addFile(Authentication authentication, @RequestParam("fileUpload") MultipartFile multipartFile, Model model){
+    public String addFile(Authentication authentication, @ModelAttribute("fileForm") FileForm fileForm, Model model){
         System.out.println("Submitting a FILE");
         String errorMessage = null;
         Files files = null;
 
         Integer userId = userService.getUser(authentication.getName()).getUserid();
-        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        MultipartFile multipartFile = fileForm.getFile();
+        String fileName = multipartFile.getOriginalFilename();
+
+
         if(!filesService.checkForDuplicates(userId,fileName).isEmpty()){
             errorMessage = "File name already exists.";
         }
