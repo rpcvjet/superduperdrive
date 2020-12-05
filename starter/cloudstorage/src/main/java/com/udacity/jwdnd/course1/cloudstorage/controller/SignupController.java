@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
+import com.udacity.jwdnd.course1.cloudstorage.model.SignupForm;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,11 @@ public class SignupController {
 
     public SignupController(UserService userService) {
         this.userService = userService;
+    }
+
+    @ModelAttribute("signupForm")
+    public SignupForm getSignupForm() {
+        return new SignupForm();
     }
 
     @GetMapping()
@@ -44,7 +50,7 @@ public class SignupController {
             model.addAttribute("signupError", signupError);
         }
 
-        return "signup";
+        return "login";
     }
 
 }

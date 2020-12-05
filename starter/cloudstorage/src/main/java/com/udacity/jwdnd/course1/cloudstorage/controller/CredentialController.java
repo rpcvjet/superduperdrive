@@ -2,6 +2,7 @@ package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.Credentials;
 import com.udacity.jwdnd.course1.cloudstorage.model.CredentialsForm;
+import com.udacity.jwdnd.course1.cloudstorage.model.FileForm;
 import com.udacity.jwdnd.course1.cloudstorage.model.NoteForm;
 import com.udacity.jwdnd.course1.cloudstorage.services.*;
 import org.springframework.security.core.Authentication;
@@ -44,6 +45,11 @@ public class CredentialController {
     @ModelAttribute("encryptionService")
     public EncryptionService startEncryptionService() {
         return new EncryptionService();
+    }
+
+    @ModelAttribute("fileForm")
+    public FileForm getFileForm(){
+        return new FileForm();
     }
 
     @GetMapping
